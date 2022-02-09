@@ -3,15 +3,33 @@
 
 <h1>New Store</h1>
 
-<form method="POST">
+<form method="POST" action="{{ url_for('main.new_store') }}">
     <fieldset>
         <legend>Please enter your information:</legend>
+            {{ form.csrf_token }}
 
+        <fieldset>
+            <legend>Add a Store</legend>
 
+            {{form.title.label}}
+            {{form.title}}
+            <ul>
+                {% for error in form.title.errors %}
+                    <li class="error">{{ error }}</li>
+                {% endfor %}
+            </ul>
 
-        <!-- TODO: Remove the next paragraph and use the `form` object passed in 
-            from the route to render a form. -->
-        <p><em>Form fields go here!</em></p>
+            {{form.address.label}}
+            {{form.address}}
+            <ul>
+                {% for error in form.address.errors %}
+                    <li class="error">{{ error }}</li>
+                {% endfor %}
+            </ul>
+
+            {{form.submit}}
+        </fieldset>
+
 
         <input type="submit" value="Submit">
     </fieldset>

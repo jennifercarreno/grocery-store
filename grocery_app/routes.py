@@ -82,15 +82,9 @@ def store_detail(store_id):
 def item_detail(item_id):
     item = GroceryItem.query.get(item_id)
     form = GroceryItemForm()
-    # TODO: Create a GroceryItemForm and pass in `obj=item`
-
-    # TODO: If form was submitted and was valid:
-    # - update the GroceryItem object and save it to the database,
-    # - flash a success message, and
-    # - redirect the user to the item detail page.
     if form.validate_on_submit():
         form.populate_obj(item)
-        db.session.add(item)
+        # db.session.add(item)
         db.session.commit()
         flash('Success! Item Updated')
         return redirect(url_for('main.item_detail', item_id = item))

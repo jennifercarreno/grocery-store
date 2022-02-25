@@ -8,6 +8,7 @@ from grocery_app.forms import GroceryStoreForm, GroceryItemForm, SignUpForm, Log
 from grocery_app.extensions import app, db ,bcrypt
 
 
+
 main = Blueprint("main", __name__)
 auth = Blueprint("auth", __name__)
 
@@ -103,6 +104,22 @@ def item_detail(item_id):
     # TODO: Send the form to the template and use it to render the form fields
         item = GroceryItem.query.get(item_id)
         return render_template('item_detail.html', item=item, form = form)
+
+@main.route('/add_to_shopping_list/<item_id>', methods=['POST'])
+def add_to_shopping_list(item_id):
+    user = current_user
+    item = GroceryItem.query.get(item_id)
+    user.shopping_list_items.append(item)
+    db.session.commit()
+    print(user.shopping_list_items)
+    return redirect(url_for('main.shopping_list'))
+
+@main.route('/shopping_list')
+@login_required
+def shopping_list():
+    user = current_user
+    items = user.shopping_list_items
+    return render_template('shopping_list.html')
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():

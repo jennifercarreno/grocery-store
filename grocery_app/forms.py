@@ -1,14 +1,14 @@
 from turtle import title
 from unicodedata import category, name
-from wsgiref.validate import validator, ValidationError
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, SelectField, SubmitField, FloatField, PasswordField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired, Length, URL
-from flask_bcrypt import bcrypt
+from wtforms.validators import DataRequired, Length, URL, ValidationError
+import bcrypt
  
 
 from grocery_app.models import GroceryStore, User
+from grocery_app.extensions import bcrypt
 
 def stores():
     return GroceryStore.query.all()
@@ -50,6 +50,7 @@ class LoginForm(FlaskForm):
     username = StringField('User Name',
         validators=[DataRequired(), Length(min=3, max=50)])
     password = PasswordField('Password', validators=[DataRequired()])
+    
     submit = SubmitField('Log In')
 
     def validate_username(self, username):
@@ -59,6 +60,5 @@ class LoginForm(FlaskForm):
 
     def validate_password(self, password):
         user = User.query.filter_by(username=self.username.data).first()
-        if user and not bcrypt.check_password_hash(
-                user.password, password.data):
+        if user and not bcrypt.check_password_hash(user.password, self.password.data):
             raise ValidationError('Password doesn\'t match. Please try again.')

@@ -17,9 +17,16 @@
                     <!-- log out should only appear for logged-in users -->
                     <a href="/new_store">New Store</a>
                     <a href="/new_item">New Item</a>
-                    <a href="/new_item">Log In</a>
-                    <a href="/new_item">Sign Up</a>
-                    <a href="/new_item">Log Out</a>
+                    {% if current_user.is_authenticated %}
+                        <!-- stuff you only want to show to logged-in users -->
+                        <a href="/logout">Log Out</a>
+
+                    {% else %}
+                        <!-- stuff you only want to show to logged-out users -->
+                        <a href="/login">Log In</a>
+                        <a href="/signup">Sign Up</a>
+                    {% endif %}
+                    
 
                 </div>
             </nav>
